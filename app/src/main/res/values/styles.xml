@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:colorEdgeEffect">@color/colorAccent</item>
+        <item name="background">@color/color_default_background</item>
+        <item name="android:colorBackground">@color/color_default_background</item>
+        <item name="android:windowBackground">@color/color_default_background</item>
+
+        <item name="colorBackgroundDefault">@color/color_default_background</item>"
+        <item name="colorTextPrimary">@color/white</item>
+        <item name="colorTextSecondary">@color/colorPrimary</item>
+    </style>
+</resources>
