@@ -3,4 +3,10 @@
     <attr name="colorBackgroundDefault" format="color" />
     <attr name="colorTextPrimary" format="color" />
     <attr name="colorTextSecondary" format="color" />
+    <attr name="colorHintText" format="color" />
+
+    <declare-styleable name="SearchBarView">
+        <attr name="drawableStartCompat" />
+        <attr name="drawableEndCompat" />
+    </declare-styleable>
 </resources>

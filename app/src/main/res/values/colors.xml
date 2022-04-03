@@ -14,6 +14,7 @@
     <color name="color_default_background">@color/black_primary</color>
     <color name="black_background">@color/black_primary</color>
     <color name="colorRippleEffect">@color/color_control_highlight</color>
+    <color name="colorTextInputBackground">#1B1B1B</color>
 
     // Colors
     <color name="black_primary">#151515</color>

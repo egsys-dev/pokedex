@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pokedéx</string>
+    <string name="search_pokemon">Pesquise seu Pokemon</string>
+    <string name="cancel">Cancelar</string>
 </resources>
