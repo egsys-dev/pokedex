@@ -40,10 +40,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupPokemonObserver()
         setupSearchBarClickButton()
         setupSearchBarTextChanged()
         setupCleanSearchBarClick()
         setupCancelButtonClick()
+    }
+
+    private fun setupPokemonObserver() {
+        viewModel.pokemon.observe(viewLifecycleOwner) {
+            Log.d("POKEMON-GET", it.name)
+        }
+
+        viewModel.pokemonLoadState.observe(viewLifecycleOwner) {
+        }
     }
 
     private fun setupSearchBarClickButton() {

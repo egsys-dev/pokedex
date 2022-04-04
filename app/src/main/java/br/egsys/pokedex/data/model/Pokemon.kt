@@ -3,12 +3,12 @@ package br.egsys.pokedex.data.model
 import com.google.gson.annotations.SerializedName
 
 data class Pokemon(
-    val id: Int,
+    val id: Long,
     val name: String,
-    val sprites: Sprites,
-    val types: Types,
-    val weight: Int,
-    val height: Int
+//    val sprites: Sprites,
+//    val types: Types,
+//    val weight: Int,
+//    val height: Int
 )
 
 data class Sprites(
