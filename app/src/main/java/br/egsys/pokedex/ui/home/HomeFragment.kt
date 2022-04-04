@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
 
     private fun setupPokemonObserver() {
         viewModel.pokemon.observe(viewLifecycleOwner) {
-            Log.d("POKEMON-GET", it.name)
+            Log.d("POKEMON-GET", "$it")
         }
 
         viewModel.pokemonLoadState.observe(viewLifecycleOwner) {

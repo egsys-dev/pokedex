@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class Pokemon(
     val id: Long,
     val name: String,
-//    val sprites: Sprites,
-//    val types: Types,
-//    val weight: Int,
-//    val height: Int
+    val sprites: Sprites,
+    val types: List<PokemonType>,
+    val weight: Long,
+    val height: Long
 )
 
 data class Sprites(
@@ -17,18 +17,19 @@ data class Sprites(
 
 data class Other(
     @SerializedName("dream_world")
-    val dreamWorld: FrontDefault
+    val dreamWorld: DreamWorld
 )
 
-data class FrontDefault(
+data class DreamWorld(
     @SerializedName("front_default")
     val frontDefault: String
 )
 
-data class Types(
+data class PokemonType(
     val type: Type
 )
 
 data class Type(
+    val slot: Long,
     val name: String
 )
