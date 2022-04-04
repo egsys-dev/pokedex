@@ -22,12 +22,19 @@ class HomeViewModel @Inject constructor(
         get() = pokemonRepository.pokemonState.asLiveData()
 
     init {
-        getPokemonById(1)
+//        getPokemonById(1)
+        getPokemons()
     }
 
     fun getPokemonById(id: Long) {
         viewModelScope.launch {
             pokemonRepository.getPokemonById(id)
+        }
+    }
+
+    fun getPokemons() {
+        viewModelScope.launch {
+            pokemonRepository.getPokemons()
         }
     }
 
