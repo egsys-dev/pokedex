@@ -40,11 +40,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupAdapter()
         setupPokemonObserver()
         setupSearchBarClickButton()
         setupSearchBarTextChanged()
         setupCleanSearchBarClick()
         setupCancelButtonClick()
+    }
+
+    private fun setupAdapter() {
+        viewBinding.pokemons.adapter = PokemonAdapter {
+            Log.d("POKEMON-GET", it.name)
+        }
     }
 
     private fun setupPokemonObserver() {
@@ -53,6 +60,13 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.pokemonLoadState.observe(viewLifecycleOwner) {
+        }
+
+        viewModel.pokemons.observe(viewLifecycleOwner) {
+            (viewBinding.pokemons.adapter as? PokemonAdapter)?.submitList(it.results)
+        }
+
+        viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
         }
     }
 

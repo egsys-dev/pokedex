@@ -102,6 +102,11 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_http_version"
 
+    //Recycler View
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
     testImplementation 'junit:junit:4.13.1'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -46,7 +46,7 @@ class PokemonRepositoryImpl @Inject constructor(
             try {
                 _pokemonsState.value = NetworkState.Loading
 
-                _pokemons.postValue(service.getPokemons(2, 0))
+                _pokemons.postValue(service.getPokemons(1))
 
                 _pokemonsState.value = NetworkState.Loaded
             } catch (e: Exception) {

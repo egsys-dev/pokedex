@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import br.egsys.pokedex.data.model.NetworkState
 import br.egsys.pokedex.data.model.Pokemon
+import br.egsys.pokedex.data.model.Pokemons
 import br.egsys.pokedex.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,6 +21,10 @@ class HomeViewModel @Inject constructor(
         get() = pokemonRepository.pokemon
     val pokemonLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonState.asLiveData()
+    val pokemons: LiveData<Pokemons>
+        get() = pokemonRepository.pokemons
+    val pokemonsLoadState: LiveData<NetworkState>
+        get() = pokemonRepository.pokemonsState.asLiveData()
 
     init {
 //        getPokemonById(1)
