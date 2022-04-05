@@ -32,7 +32,7 @@ class PokemonAdapter(
         private var pokemonName: PokemonName? = null
 
         init {
-            viewBinding.container.setOnClickListener {
+            itemView.setOnClickListener {
                 pokemonName?.let {
                     onItemClicked(it)
                 }

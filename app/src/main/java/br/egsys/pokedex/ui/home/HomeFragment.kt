@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
                 closeKeyboard()
             } else {
                 viewBinding.apply {
-                    searchBar.updateMargin(right = 0)
+//                    searchBar.updateMargin(right = 0)
                     cancel.isVisible = true
                 }
             }
@@ -119,10 +119,7 @@ class HomeFragment : Fragment() {
             closeKeyboard()
             viewBinding.apply {
                 cancel.isVisible = false
-                searchBar.apply {
-                    text = null
-                    updateMargin(right = resources.getDimension(R.dimen.spacing_x_large).toInt())
-                }
+                searchBar.text = null
             }
         }
     }
