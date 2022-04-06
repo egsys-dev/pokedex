@@ -51,13 +51,13 @@ class HomeFragment : Fragment() {
 
     private fun setupAdapter() {
         viewBinding.pokemons.adapter = PokemonAdapter {
-            PokemonDetailsFragment.show(childFragmentManager)
+            viewModel.getPokemonByName(it.name)
         }
     }
 
     private fun setupPokemonObserver() {
         viewModel.pokemon.observe(viewLifecycleOwner) {
-            Log.d("POKEMON-GET", "$it")
+            PokemonDetailsFragment.show(childFragmentManager, it)
         }
 
         viewModel.pokemonLoadState.observe(viewLifecycleOwner) {

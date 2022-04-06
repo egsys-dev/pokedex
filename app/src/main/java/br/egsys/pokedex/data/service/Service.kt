@@ -11,6 +11,9 @@ interface Service {
     @GET("pokemon/{id}")
     suspend fun getPokemonById(@Path("id") id: Long): Pokemon
 
+    @GET("pokemon/{name}")
+    suspend fun getPokemonByName(@Path("name") name: String): Pokemon
+
     @GET("pokemon")
     suspend fun getPokemons(
         @Query("pageNumber") pageNumber: Int,

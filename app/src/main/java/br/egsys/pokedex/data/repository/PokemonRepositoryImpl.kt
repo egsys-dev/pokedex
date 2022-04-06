@@ -9,7 +9,6 @@ import br.egsys.pokedex.data.service.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -37,6 +36,20 @@ class PokemonRepositoryImpl @Inject constructor(
                 _pokemonState.value = NetworkState.Loaded
             } catch (e: Exception) {
                 _pokemonState.value = NetworkState.Failed(e)
+            }
+        }
+    }
+
+    override suspend fun getPokemonByName(name: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                _pokemonState.value = NetworkState.Loading
+
+                _pokemon.postValue(service.getPokemonByName(name))
+
+                _pokemonState.value = NetworkState.Loaded
+            } catch (e: Exception) {
+                NetworkState.Failed(e)
             }
         }
     }

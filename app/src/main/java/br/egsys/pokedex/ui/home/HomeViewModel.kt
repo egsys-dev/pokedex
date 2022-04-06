@@ -35,6 +35,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getPokemonByName(name: String) {
+        viewModelScope.launch {
+            pokemonRepository.getPokemonByName(name)
+        }
+    }
+
     fun getPokemons() {
         viewModelScope.launch {
             pokemonRepository.getPokemons()
