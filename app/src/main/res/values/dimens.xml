@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="width_pokeball_splash_screen">100dp</dimen>
+    <dimen name="bottom_sheet_thumb_indicator_width">64dp</dimen>
+    <dimen name="bottom_sheet_thumb_indicator_height">4dp</dimen>
+    <dimen name="bottom_sheet_thumb_indicator_top_offset">14dp</dimen>
+    <dimen name="base_bottom_sheet_min_height">380dp</dimen>
 
     <!-- region Spacings -->
     <dimen name="spacing_bigger">56dp</dimen>

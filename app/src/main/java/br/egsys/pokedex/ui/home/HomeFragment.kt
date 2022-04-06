@@ -9,11 +9,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import br.egsys.pokedex.R
+import br.egsys.pokedex.data.model.PokemonName
+import br.egsys.pokedex.data.model.SearchPokemon
 import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
-import br.egsys.pokedex.extension.updateMargin
 import br.egsys.pokedex.ui.MainActivity
+import br.egsys.pokedex.ui.pokemondetails.PokemonDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +51,7 @@ class HomeFragment : Fragment() {
 
     private fun setupAdapter() {
         viewBinding.pokemons.adapter = PokemonAdapter {
-            Log.d("POKEMON-GET", it.name)
+            PokemonDetailsFragment.show(childFragmentManager)
         }
     }
 
@@ -63,10 +64,24 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.pokemons.observe(viewLifecycleOwner) {
-            (viewBinding.pokemons.adapter as? PokemonAdapter)?.submitList(it.results)
+            submitList(it.results)
         }
 
         viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
+        }
+
+        viewModel.pokemonSearch.observe(viewLifecycleOwner) {
+            when (it) {
+                is SearchPokemon.Loading -> {
+                }
+                is SearchPokemon.Loaded -> {
+                    submitList(it.pokemons)
+                }
+                is SearchPokemon.Empty -> {
+                }
+                is SearchPokemon.Failed -> {
+                }
+            }
         }
     }
 
@@ -76,25 +91,15 @@ class HomeFragment : Fragment() {
                 performCurrentTextSearch()
                 closeKeyboard()
             } else {
-                viewBinding.apply {
-//                    searchBar.updateMargin(right = 0)
-                    cancel.isVisible = true
-                }
+                viewBinding.cancel.isVisible = true
             }
         }
     }
 
     private fun setupSearchBarTextChanged() {
         viewBinding.searchBar.doOnTextChanged { text, start, before, count ->
-            viewModel.searchPlaylist(text.toString())
-            Log.d("SEARCH", text.toString())
-
-            if (text.isNullOrBlank()) {
-//                viewModel.playlists.value?.let {
-//                    submitPlaylists(it)
-//                }
-
-                Log.d("SEARCH", "text null")
+            if (!text.isNullOrBlank()) {
+                viewModel.searchPlaylist(text.toString())
             }
         }
     }
@@ -102,9 +107,9 @@ class HomeFragment : Fragment() {
     private fun setupCleanSearchBarClick() {
         viewBinding.apply {
             searchBar.setClearSearchButtonClickListener {
-//                viewModel.playlists.value?.let {
-//                    submitPlaylists(it)
-//                }
+                viewModel.pokemons.value?.let {
+                    submitList(it.results)
+                }
 
                 searchBar.text = null
 
@@ -136,6 +141,10 @@ class HomeFragment : Fragment() {
 
     private fun closeKeyboard() {
         context?.closeKeyboard(viewBinding.root)
+    }
+
+    private fun submitList(pokemons: List<PokemonName>) {
+        (viewBinding.pokemons.adapter as? PokemonAdapter)?.submitList(pokemons)
     }
 
     companion object {
