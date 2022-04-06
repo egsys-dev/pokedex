@@ -19,8 +19,8 @@ class HomeViewModel @Inject constructor(
         get() = pokemonRepository.pokemon
     val pokemonLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonState.asLiveData()
-    val pokemons: LiveData<Pokemons>
-        get() = pokemonRepository.pokemons
+    val pokemons: LiveData<List<Pokemon>>
+        get() = pokemonRepository.pokemons.asLiveData()
     val pokemonsLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonsState.asLiveData()
 
@@ -50,7 +50,9 @@ class HomeViewModel @Inject constructor(
     fun searchPlaylist(term: String) {
         _pokemonSearch.postValue(SearchPokemon.Loading)
 
-        val searchResponse = pokemons.value?.results?.filter {
+        val list = pokemonRepository.pokemons.value
+
+        val searchResponse = list?.filter {
             it.name.contains(term, true)
         }
 

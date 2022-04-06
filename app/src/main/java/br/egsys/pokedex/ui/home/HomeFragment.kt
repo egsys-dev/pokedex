@@ -1,7 +1,6 @@
 package br.egsys.pokedex.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import br.egsys.pokedex.data.model.PokemonName
+import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.data.model.SearchPokemon
 import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
@@ -64,7 +63,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.pokemons.observe(viewLifecycleOwner) {
-            submitList(it.results)
+            submitList(it)
         }
 
         viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
@@ -108,7 +107,7 @@ class HomeFragment : Fragment() {
         viewBinding.apply {
             searchBar.setClearSearchButtonClickListener {
                 viewModel.pokemons.value?.let {
-                    submitList(it.results)
+                    submitList(it)
                 }
 
                 searchBar.text = null
@@ -143,7 +142,7 @@ class HomeFragment : Fragment() {
         context?.closeKeyboard(viewBinding.root)
     }
 
-    private fun submitList(pokemons: List<PokemonName>) {
+    private fun submitList(pokemons: List<Pokemon>) {
         (viewBinding.pokemons.adapter as? PokemonAdapter)?.submitList(pokemons)
     }
 

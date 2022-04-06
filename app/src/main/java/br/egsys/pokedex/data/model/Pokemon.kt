@@ -16,7 +16,9 @@ data class Pokemon(
 
 @Parcelize
 data class Sprites(
-    val other: Other
+    val other: Other,
+    @SerializedName("front_default")
+    val frontDefault: String
 ) : Parcelable
 
 @Parcelize

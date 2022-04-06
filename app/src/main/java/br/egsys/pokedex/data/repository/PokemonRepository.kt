@@ -3,13 +3,12 @@ package br.egsys.pokedex.data.repository
 import androidx.lifecycle.LiveData
 import br.egsys.pokedex.data.model.NetworkState
 import br.egsys.pokedex.data.model.Pokemon
-import br.egsys.pokedex.data.model.Pokemons
 import kotlinx.coroutines.flow.StateFlow
 
 interface PokemonRepository {
 
     val pokemon: LiveData<Pokemon>
-    val pokemons: LiveData<Pokemons>
+    val pokemons: StateFlow<List<Pokemon>>
 
     val pokemonState: StateFlow<NetworkState>
     val pokemonsState: StateFlow<NetworkState>
