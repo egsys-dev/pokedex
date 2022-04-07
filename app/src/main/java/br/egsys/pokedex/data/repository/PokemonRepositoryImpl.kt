@@ -28,20 +28,6 @@ class PokemonRepositoryImpl @Inject constructor(
 
     private var listPokemon = mutableListOf<Pokemon>()
 
-    override suspend fun getPokemonById(id: Long) {
-        withContext(Dispatchers.IO) {
-            try {
-                _pokemonState.value = NetworkState.Loading
-
-                _pokemon.postValue(service.getPokemonById(id))
-
-                _pokemonState.value = NetworkState.Loaded
-            } catch (e: Exception) {
-                _pokemonState.value = NetworkState.Failed(e)
-            }
-        }
-    }
-
     override suspend fun getPokemonByName(name: String) {
         withContext(Dispatchers.IO) {
             try {
@@ -51,7 +37,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
                 _pokemonState.value = NetworkState.Loaded
             } catch (e: Exception) {
-                NetworkState.Failed(e)
+                _pokemonState.value = NetworkState.Failed(e)
             }
         }
     }
@@ -80,6 +66,20 @@ class PokemonRepositoryImpl @Inject constructor(
                 _pokemonsState.value = NetworkState.Loaded
             } catch (e: Exception) {
                 _pokemonsState.value = NetworkState.Failed(e)
+            }
+        }
+    }
+
+    override suspend fun getRandomPokemon(idRandom: Int) {
+        withContext(Dispatchers.IO) {
+            try {
+                _pokemonState.value = NetworkState.Loading
+
+                _pokemon.postValue(service.getRandomPokemon(idRandom))
+
+                _pokemonState.value = NetworkState.Loaded
+            } catch (e: Exception) {
+                _pokemonState.value = NetworkState.Failed(e)
             }
         }
     }

@@ -5,7 +5,9 @@ import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -30,12 +32,6 @@ class HomeViewModel @Inject constructor(
         getPokemons()
     }
 
-    fun getPokemonById(id: Long) {
-        viewModelScope.launch {
-            pokemonRepository.getPokemonById(id)
-        }
-    }
-
     fun getPokemonByName(name: String) {
         viewModelScope.launch {
             pokemonRepository.getPokemonByName(name)
@@ -46,6 +42,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             pokemonRepository.getPokemons(limit = LIMIT, offSet = offSet)
             offSet += 20
+        }
+    }
+
+    fun getRandomPokemon() {
+        viewModelScope.launch {
+            pokemonRepository.getRandomPokemon(Random.nextInt(100))
         }
     }
 

@@ -14,7 +14,7 @@ interface PokemonRepository {
     val pokemonState: StateFlow<NetworkState>
     val pokemonsState: StateFlow<NetworkState>
 
-    suspend fun getPokemonById(id: Long)
     suspend fun getPokemonByName(name: String)
     suspend fun getPokemons(limit: Int, offSet: Int)
+    suspend fun getRandomPokemon(idRandom: Int)
 }

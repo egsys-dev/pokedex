@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
 
         setupAdapter()
         setupPokemonObserver()
+        setupGetPokemonUpdated()
         setupSearchBarClickButton()
         setupSearchBarTextChanged()
         setupCleanSearchBarClick()
@@ -137,6 +138,12 @@ class HomeFragment : Fragment() {
                 is SearchPokemon.Failed -> {
                 }
             }
+        }
+    }
+
+    private fun setupGetPokemonUpdated() {
+        viewBinding.getRandomPokemon.setOnClickListener {
+            viewModel.getRandomPokemon()
         }
     }
 
