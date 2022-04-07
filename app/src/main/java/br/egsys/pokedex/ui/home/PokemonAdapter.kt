@@ -60,7 +60,10 @@ class PokemonAdapter(
                 .load(pokemon.sprites.frontDefault)
                 .into(viewBinding.image)
 
-            viewBinding.name.text = firstLetterUpperCase(pokemon.name)
+            viewBinding.apply {
+                name.text = firstLetterUpperCase(pokemon.name)
+                counter.text = "#${pokemon.id}"
+            }
         }
     }
 

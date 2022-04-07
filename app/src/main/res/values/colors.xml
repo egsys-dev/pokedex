@@ -17,15 +17,18 @@
     <color name="colorTextInputBackground">#1B1B1B</color>
 
     // Colors
+    <color name="white_secondary">#FCFCFC</color>
     <color name="black_primary">#151515</color>
     <color name="black_secondary">#222222</color>
     <color name="black_tertiary">#191919</color>
+    <color name="black_quaternary">#333A46</color>
     <color name="blue_primary">#1565FF</color>
     <color name="blue_secondary">#2F76FF</color>
-    <color name="red_primary">#EA222D</color>
+    <color name="pink_primary">#F7776A</color>
+    <color name="pink_secondary">#F98E80</color>
     <color name="red_secondary">#FF424C</color>
     <color name="gray_primary">#222222</color>
-    <color name="gray_secondary">#A5A5A5</color>
+    <color name="gray_secondary">#545454</color>
     <color name="gray_tertiary">#272727</color>
     <color name="gray_quaternary">#343434</color>
     <color name="gray_background_category">#1C1C1C</color>

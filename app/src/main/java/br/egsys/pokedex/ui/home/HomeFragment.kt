@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.egsys.pokedex.R
 import br.egsys.pokedex.data.model.NetworkState
 import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.data.model.SearchPokemon
@@ -88,21 +89,23 @@ class HomeFragment : Fragment() {
         viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Initial -> {
+//                    viewBinding.loading.isVisible = false
+//                    viewBinding.notPokemonContainer.isVisible = false
                 }
                 is NetworkState.Loading -> {
-                    viewBinding.loading.isVisible = true
+//                    viewBinding.loading.isVisible = true
                 }
                 is NetworkState.Loaded -> {
                     viewBinding.apply {
-                        loading.isVisible = false
+//                        loading.isVisible = false
                         pokemons.isVisible = true
-                        notPokemonContainer.isVisible = false
+                        emptyPokemon.isVisible = false
                     }
                 }
                 is NetworkState.Failed -> {
                     viewBinding.apply {
                         pokemons.isVisible = false
-                        notPokemonContainer.isVisible = true
+//                        notPokemonContainer.isVisible = true
                     }
                 }
             }
@@ -111,9 +114,10 @@ class HomeFragment : Fragment() {
         viewModel.pokemonSearch.observe(viewLifecycleOwner) {
             when (it) {
                 is SearchPokemon.Loading -> {
+
                     viewBinding.apply {
-                        loading.isVisible = true
-                        notPokemonContainer.isVisible = false
+//                        loading.isVisible = true
+//                        notPokemonContainer.isVisible = false
                         pokemons.isVisible = false
                     }
                 }
@@ -121,30 +125,27 @@ class HomeFragment : Fragment() {
                     updateList(it.pokemons)
 
                     viewBinding.apply {
-                        loading.isVisible = false
-                        notPokemonContainer.isVisible = false
+//                        loading.isVisible = false
+//                        notPokemonContainer.isVisible = false
                         pokemons.isVisible = true
                     }
                 }
                 is SearchPokemon.Empty -> {
-                    viewBinding.apply {
-                        namePokemon.text = searchBar.text?.toString()
 
-                        loading.isVisible = false
-                        notPokemonContainer.isVisible = true
+                    viewBinding.apply {
+//                        loading.isVisible = false
+                        emptyPokemon.isVisible = true
                         pokemons.isVisible = false
                     }
-                }
-                is SearchPokemon.Failed -> {
                 }
             }
         }
     }
 
     private fun setupGetPokemonUpdated() {
-        viewBinding.getRandomPokemon.setOnClickListener {
-            viewModel.getRandomPokemon()
-        }
+//        viewBinding.getRandomPokemon.setOnClickListener {
+//            viewModel.getRandomPokemon()
+//        }
     }
 
     private fun setupSearchBarClickButton() {
@@ -152,26 +153,36 @@ class HomeFragment : Fragment() {
             if (!hasFocus) {
                 performCurrentTextSearch()
                 closeKeyboard()
+                setupNameResultSearch(R.string.all_pokemons)
             } else {
                 viewBinding.cancel.isVisible = true
+                setupNameResultSearch(R.string.result_search)
             }
         }
     }
 
     private fun setupSearchBarTextChanged() {
         viewBinding.searchBar.doOnTextChanged { text, start, before, count ->
-            if (!text.isNullOrBlank()) {
-                viewModel.searchPlaylist(text.toString())
+            viewModel.searchPlaylist(text.toString())
+
+            if (text.isNullOrBlank()) {
+                viewModel.pokemons.value?.let {
+                    updateList(it.pokemons)
+
+                    setupNameResultSearch(R.string.all_pokemons)
+                }
             }
         }
     }
 
+    private fun setupNameResultSearch(text: Int) {
+        viewBinding.resultSearch.text = getString(text)
+    }
+
     private fun setupCleanSearchBarClick() {
-        viewBinding.apply {
-            searchBar.setClearSearchButtonClickListener {
-                viewModel.pokemons.value?.pokemons?.let {
-                    updateList(it)
-                }
+        viewBinding.searchBar.setClearSearchButtonClickListener {
+            viewModel.pokemons.value?.pokemons?.let {
+                updateList(it)
             }
         }
     }
@@ -179,6 +190,8 @@ class HomeFragment : Fragment() {
     private fun setupCancelButtonClick() {
         viewBinding.cancel.setOnClickListener {
             closeKeyboard()
+            setupNameResultSearch(R.string.all_pokemons)
+
             viewBinding.apply {
                 cancel.isVisible = false
                 searchBar.text = null
