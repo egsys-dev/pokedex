@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.egsys.pokedex.data.model.NetworkState
 import br.egsys.pokedex.data.model.Pokemon
+import br.egsys.pokedex.data.model.PokemonWithCount
 import br.egsys.pokedex.data.service.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,16 +17,16 @@ class PokemonRepositoryImpl @Inject constructor(
 ) : PokemonRepository {
 
     private val _pokemon = MutableLiveData<Pokemon>()
-    private val _pokemons = MutableStateFlow<List<Pokemon>>(emptyList())
+    private val _pokemons = MutableStateFlow(PokemonWithCount())
     private val _pokemonState = MutableStateFlow<NetworkState>(NetworkState.Idle)
     private val _pokemonsState = MutableStateFlow<NetworkState>(NetworkState.Idle)
 
     override val pokemon: LiveData<Pokemon> = _pokemon
-    override val pokemons: StateFlow<List<Pokemon>> = _pokemons
+    override val pokemons: StateFlow<PokemonWithCount> = _pokemons
     override val pokemonState: StateFlow<NetworkState> = _pokemonState
     override val pokemonsState: StateFlow<NetworkState> = _pokemonsState
 
-    private val listPokemon = mutableListOf<Pokemon>()
+    private var listPokemon = mutableListOf<Pokemon>()
 
     override suspend fun getPokemonById(id: Long) {
         withContext(Dispatchers.IO) {
@@ -55,22 +56,26 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPokemons() {
+    override suspend fun getPokemons(limit: Int, offSet: Int) {
         withContext(Dispatchers.IO) {
             try {
                 _pokemonsState.value = NetworkState.Loading
 
-                val response = service.getPokemons(1)
+                val response = service.getPokemons(
+                    limit = limit,
+                    offSet = offSet
+                )
 
                 response.results.forEach {
                     val pokemon = service.getPokemonByName(it.name)
 
-                    if (!listPokemon.contains(pokemon)) {
-                        listPokemon.add(pokemon)
-                    }
+                    listPokemon.add(pokemon)
                 }
 
-                _pokemons.value = listPokemon.toList()
+                _pokemons.value = PokemonWithCount(
+                    count = response.count,
+                    pokemons = listPokemon.toList()
+                )
 
                 _pokemonsState.value = NetworkState.Loaded
             } catch (e: Exception) {

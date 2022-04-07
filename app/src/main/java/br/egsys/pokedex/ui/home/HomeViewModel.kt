@@ -15,17 +15,18 @@ class HomeViewModel @Inject constructor(
     private val _pokemonSearch: MutableLiveData<SearchPokemon> = MutableLiveData()
 
     val pokemonSearch: LiveData<SearchPokemon> = _pokemonSearch
+    var offSet = 0
+
     val pokemon: LiveData<Pokemon>
         get() = pokemonRepository.pokemon
     val pokemonLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonState.asLiveData()
-    val pokemons: LiveData<List<Pokemon>>
+    val pokemons: LiveData<PokemonWithCount>
         get() = pokemonRepository.pokemons.asLiveData()
     val pokemonsLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonsState.asLiveData()
 
     init {
-//        getPokemonById(1)
         getPokemons()
     }
 
@@ -43,20 +44,19 @@ class HomeViewModel @Inject constructor(
 
     fun getPokemons() {
         viewModelScope.launch {
-            pokemonRepository.getPokemons()
+            pokemonRepository.getPokemons(limit = LIMIT, offSet = offSet)
+            offSet += 20
         }
     }
 
     fun searchPlaylist(term: String) {
         _pokemonSearch.postValue(SearchPokemon.Loading)
 
-        val list = pokemonRepository.pokemons.value
-
-        val searchResponse = list?.filter {
+        val searchResponse = pokemonRepository.pokemons.value.pokemons.filter {
             it.name.contains(term, true)
         }
 
-        searchResponse?.let {
+        searchResponse.let {
             if (it.isEmpty()) {
                 _pokemonSearch.postValue(SearchPokemon.Empty)
             } else {
@@ -65,5 +65,9 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    companion object {
+        const val LIMIT = 20
     }
 }

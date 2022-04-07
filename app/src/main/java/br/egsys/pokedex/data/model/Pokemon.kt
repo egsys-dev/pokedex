@@ -15,6 +15,12 @@ data class Pokemon(
 ) : Parcelable
 
 @Parcelize
+data class PokemonWithCount(
+    val count: Int = 0,
+    val pokemons: List<Pokemon> = listOf()
+) : Parcelable
+
+@Parcelize
 data class Sprites(
     val other: Other,
     @SerializedName("front_default")

@@ -27,6 +27,16 @@ class PokemonAdapter(
         }
     }
 
+    fun updateList(pokemons: List<Pokemon>) {
+        val currentListToUpdated = currentList.toMutableList()
+
+        pokemons.forEach {
+            currentListToUpdated.add(it)
+        }
+
+        submitList(pokemons)
+    }
+
     inner class PokemonViewHolder(
         view: View,
         private val onItemClicked: (pokemons: Pokemon) -> Unit

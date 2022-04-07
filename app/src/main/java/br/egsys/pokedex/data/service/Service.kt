@@ -16,6 +16,7 @@ interface Service {
 
     @GET("pokemon")
     suspend fun getPokemons(
-        @Query("pageNumber") pageNumber: Int,
+        @Query("limit") limit: Int,
+        @Query("offset") offSet: Int
     ): Pokemons
 }

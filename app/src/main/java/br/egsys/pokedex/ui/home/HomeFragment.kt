@@ -8,11 +8,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.data.model.SearchPokemon
 import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
-import br.egsys.pokedex.ui.MainActivity
 import br.egsys.pokedex.ui.pokemondetails.PokemonDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,8 +22,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-    private val mainActivity: MainActivity?
-        get() = activity as? MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,9 +48,27 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupAdapter() {
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        viewBinding.pokemons.layoutManager = layoutManager
+
         viewBinding.pokemons.adapter = PokemonAdapter {
             viewModel.getPokemonByName(it.name)
         }
+
+        viewBinding.pokemons.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                    val offSet = viewModel.offSet
+
+                    if (offSet == lastVisibleItem + 1) {
+                        viewModel.getPokemons()
+                    }
+                }
+            }
+        )
     }
 
     private fun setupPokemonObserver() {
@@ -63,7 +80,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.pokemons.observe(viewLifecycleOwner) {
-            submitList(it)
+            updateList(it.pokemons)
         }
 
         viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
@@ -74,7 +91,7 @@ class HomeFragment : Fragment() {
                 is SearchPokemon.Loading -> {
                 }
                 is SearchPokemon.Loaded -> {
-                    submitList(it.pokemons)
+                    updateList(it.pokemons)
                 }
                 is SearchPokemon.Empty -> {
                 }
@@ -106,8 +123,8 @@ class HomeFragment : Fragment() {
     private fun setupCleanSearchBarClick() {
         viewBinding.apply {
             searchBar.setClearSearchButtonClickListener {
-                viewModel.pokemons.value?.let {
-                    submitList(it)
+                viewModel.pokemons.value?.pokemons?.let {
+                    updateList(it)
                 }
 
                 searchBar.text = null
@@ -142,8 +159,8 @@ class HomeFragment : Fragment() {
         context?.closeKeyboard(viewBinding.root)
     }
 
-    private fun submitList(pokemons: List<Pokemon>) {
-        (viewBinding.pokemons.adapter as? PokemonAdapter)?.submitList(pokemons)
+    private fun updateList(pokemons: List<Pokemon>) {
+        (viewBinding.pokemons.adapter as? PokemonAdapter)?.updateList(pokemons)
     }
 
     companion object {
