@@ -18,8 +18,8 @@ class PokemonRepositoryImpl @Inject constructor(
 
     private val _pokemon = MutableLiveData<Pokemon>()
     private val _pokemons = MutableStateFlow(PokemonWithCount())
-    private val _pokemonState = MutableStateFlow<NetworkState>(NetworkState.Idle)
-    private val _pokemonsState = MutableStateFlow<NetworkState>(NetworkState.Idle)
+    private val _pokemonState = MutableStateFlow<NetworkState>(NetworkState.Initial)
+    private val _pokemonsState = MutableStateFlow<NetworkState>(NetworkState.Initial)
 
     override val pokemon: LiveData<Pokemon> = _pokemon
     override val pokemons: StateFlow<PokemonWithCount> = _pokemons
