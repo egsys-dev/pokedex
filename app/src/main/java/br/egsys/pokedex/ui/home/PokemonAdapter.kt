@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.R
 import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.databinding.ItemPokemonBinding
+import br.egsys.pokedex.extension.firstLetterUpperCase
 import br.egsys.pokedex.extension.inflate
 import com.squareup.picasso.Picasso
 
@@ -59,7 +60,7 @@ class PokemonAdapter(
                 .load(pokemon.sprites.frontDefault)
                 .into(viewBinding.image)
 
-            viewBinding.name.text = pokemon.name
+            viewBinding.name.text = firstLetterUpperCase(pokemon.name)
         }
     }
 
