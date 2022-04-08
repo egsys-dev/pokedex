@@ -7,6 +7,13 @@
     android:clickable="true"
     android:focusable="true">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_background" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -100,11 +107,11 @@
             android:id="@+id/empty_pokemon"
             style="@style/text_normal_dm_sans_regular"
             android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xx_large"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xx_large"
             android:text="@string/empty_pokemon"
             android:textColor="@color/black"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -129,19 +136,19 @@
 
     </FrameLayout>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/loading"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/loading"
-            tools:visibility="visible" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
