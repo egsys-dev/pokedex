@@ -4,8 +4,8 @@ import androidx.lifecycle.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -27,6 +27,8 @@ class HomeViewModel @Inject constructor(
         get() = pokemonRepository.pokemons.asLiveData()
     val pokemonsLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonsState.asLiveData()
+    val resquestPagination: StateFlow<NetworkState>
+        get() = pokemonRepository.paginationState
 
     init {
         getPokemons()

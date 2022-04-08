@@ -1,6 +1,7 @@
 package br.egsys.pokedex.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
 import br.egsys.pokedex.ui.pokemondetails.PokemonDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -44,6 +46,7 @@ class HomeFragment : Fragment() {
         setupAdapter()
         setupPokemonObserver()
         setupGetPokemonRandom()
+        setupTryAgain()
         setupSearchBarClickButton()
         setupSearchBarTextChanged()
         setupCleanSearchBarClick()
@@ -67,7 +70,9 @@ class HomeFragment : Fragment() {
                     val offSet = viewModel.offSet
 
                     if (offSet == lastVisibleItem + 1) {
-                        viewModel.getPokemons()
+                        if (viewModel.resquestPagination.value == NetworkState.Loaded) {
+                            viewModel.getPokemons()
+                        }
                     }
                 }
             }
@@ -98,22 +103,26 @@ class HomeFragment : Fragment() {
                         pokemons.isVisible = true
                         pokemons.isClickable = false
                         emptyPokemon.isVisible = false
+                        noConnectionContainer.isVisible = false
+                        meetPokemonContainer.isVisible = false
                     }
                 }
                 is NetworkState.Loaded -> {
                     viewBinding.apply {
-                        loading.isVisible = false
                         pokemons.isVisible = true
                         pokemons.isClickable = true
+                        meetPokemonContainer.isVisible = true
                         emptyPokemon.isVisible = false
+                        noConnectionContainer.isVisible = false
+                        loading.isVisible = false
                     }
                 }
                 is NetworkState.Failed -> {
                     viewBinding.apply {
                         pokemons.isVisible = false
                         loading.isVisible = false
-                        pokemons.isClickable = true
-//                        notPokemonContainer.isVisible = true
+                        noConnectionContainer.isVisible = true
+                        meetPokemonContainer.isVisible = false
                     }
                 }
             }
@@ -153,6 +162,12 @@ class HomeFragment : Fragment() {
     private fun setupGetPokemonRandom() {
         viewBinding.randomPokemon.setOnClickListener {
             viewModel.getRandomPokemon()
+        }
+    }
+
+    private fun setupTryAgain() {
+        viewBinding.tryAgain.setOnClickListener {
+            viewModel.getPokemons()
         }
     }
 

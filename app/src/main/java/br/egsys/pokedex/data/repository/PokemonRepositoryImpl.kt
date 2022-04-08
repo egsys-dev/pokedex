@@ -20,11 +20,13 @@ class PokemonRepositoryImpl @Inject constructor(
     private val _pokemons = MutableStateFlow(PokemonWithCount())
     private val _pokemonState = MutableStateFlow<NetworkState>(NetworkState.Initial)
     private val _pokemonsState = MutableStateFlow<NetworkState>(NetworkState.Initial)
+    private val _paginationState = MutableStateFlow<NetworkState>(NetworkState.Initial)
 
     override val pokemon: LiveData<Pokemon> = _pokemon
     override val pokemons: StateFlow<PokemonWithCount> = _pokemons
     override val pokemonState: StateFlow<NetworkState> = _pokemonState
     override val pokemonsState: StateFlow<NetworkState> = _pokemonsState
+    override val paginationState: StateFlow<NetworkState> = _paginationState
 
     private var listPokemon = mutableListOf<Pokemon>()
 
@@ -46,6 +48,7 @@ class PokemonRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 _pokemonsState.value = NetworkState.Loading
+                _paginationState.value = NetworkState.Loading
 
                 val response = service.getPokemons(
                     limit = limit,
@@ -64,8 +67,10 @@ class PokemonRepositoryImpl @Inject constructor(
                 )
 
                 _pokemonsState.value = NetworkState.Loaded
+                _paginationState.value = NetworkState.Loaded
             } catch (e: Exception) {
                 _pokemonsState.value = NetworkState.Failed(e)
+                _paginationState.value = NetworkState.Loaded
             }
         }
     }

@@ -13,4 +13,7 @@
     <string name="Type">type</string>
     <string name="height">Altura</string>
     <string name="weight">Peso</string>
+    <string name="no_connection">Sem conexão com a internet</string>
+    <string name="no_connection_description">Não foi possível carregar os seus pokemons.  Verifique sua conexão e tente novamente.</string>
+    <string name="try_again">Tentar novamente</string>
 </resources>

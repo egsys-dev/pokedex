@@ -13,6 +13,7 @@ interface PokemonRepository {
 
     val pokemonState: StateFlow<NetworkState>
     val pokemonsState: StateFlow<NetworkState>
+    val paginationState: StateFlow<NetworkState>
 
     suspend fun getPokemonByName(name: String)
     suspend fun getPokemons(limit: Int, offSet: Int)
