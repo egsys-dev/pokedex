@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.R
 import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.databinding.ViewPokemonItemBinding
+import br.egsys.pokedex.extension.firstLetterUpperCase
 import br.egsys.pokedex.extension.inflate
 import com.squareup.picasso.Picasso
 
@@ -60,7 +61,7 @@ class PokemonAdapter(
                 .into(viewBinding.image)
 
             viewBinding.apply {
-                name.text = pokemon.name
+                name.text = firstLetterUpperCase(pokemon.name)
                 counter.text = "#${bindingAdapterPosition + 1}"
             }
         }

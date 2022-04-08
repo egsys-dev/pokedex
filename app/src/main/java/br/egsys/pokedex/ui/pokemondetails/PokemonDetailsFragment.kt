@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.databinding.FragmentPokemonDetailsBinding
+import br.egsys.pokedex.extension.firstLetterUpperCase
 import br.egsys.pokedex.ui.basedialog.BaseBottomSheetDialogFragment
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +38,27 @@ class PokemonDetailsFragment : BaseBottomSheetDialogFragment() {
     private fun readArgs() {
         (arguments?.getParcelable(ARG) as? Pokemon)?.let {
             viewModel.setupPokemon(it)
+            setupView(it)
         }
+    }
+
+    private fun setupView(pokemon: Pokemon) {
+        viewBinding.apply {
+            Picasso.with(context).load(pokemon.sprites.frontDefault).into(image)
+            name.text = firstLetterUpperCase(pokemon.name)
+            valueWeight.text = "${pokemon.weight}Kg"
+            valueHeight.text = "${pokemon.height}m"
+        }
+
+        val listType = mutableListOf<String>()
+
+        pokemon.types.forEach {
+            listType.add(it.type.name)
+        }
+
+        viewBinding.type.text = listType
+            .takeIf { it.isNotEmpty() }
+            ?.joinToString(", ")
     }
 
     companion object {
