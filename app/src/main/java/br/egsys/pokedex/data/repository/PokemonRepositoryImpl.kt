@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import br.egsys.pokedex.data.dto.PokemonDto
 import br.egsys.pokedex.data.model.NetworkState
 import br.egsys.pokedex.data.model.Pokemon
-import br.egsys.pokedex.data.model.PokemonWithCount
+import br.egsys.pokedex.data.model.PokemonDtoWithCount
 import br.egsys.pokedex.data.service.Service
 import br.egsys.pokedex.data.util.DomainMapper
 import kotlinx.coroutines.Dispatchers
@@ -19,14 +19,14 @@ class PokemonRepositoryImpl @Inject constructor(
     private val pokemonMap: DomainMapper<PokemonDto, Pokemon>
 ) : PokemonRepository {
 
-    private val _pokemon = MutableLiveData<Pokemon>()
-    private val _pokemons = MutableStateFlow(PokemonWithCount())
+    private val _pokemon = MutableLiveData<PokemonDto>()
+    private val _pokemons = MutableStateFlow(PokemonDtoWithCount())
     private val _pokemonState = MutableStateFlow<NetworkState>(NetworkState.Initial)
     private val _pokemonsState = MutableStateFlow<NetworkState>(NetworkState.Initial)
     private val _paginationState = MutableStateFlow<NetworkState>(NetworkState.Initial)
 
-    override val pokemon: LiveData<Pokemon> = _pokemon
-    override val pokemons: StateFlow<PokemonWithCount> = _pokemons
+    override val pokemon: LiveData<PokemonDto> = _pokemon
+    override val pokemons: StateFlow<PokemonDtoWithCount> = _pokemons
     override val pokemonState: StateFlow<NetworkState> = _pokemonState
     override val pokemonsState: StateFlow<NetworkState> = _pokemonsState
     override val paginationState: StateFlow<NetworkState> = _paginationState
@@ -38,7 +38,9 @@ class PokemonRepositoryImpl @Inject constructor(
             try {
                 _pokemonState.value = NetworkState.Loading
 
-                _pokemon.postValue(service.getPokemonByName(name))
+                val response = service.getPokemonByName(name)
+
+                _pokemon.postValue(pokemonMap.mapFromDomainModel(response))
 
                 _pokemonState.value = NetworkState.Loaded
             } catch (e: Exception) {
@@ -64,9 +66,9 @@ class PokemonRepositoryImpl @Inject constructor(
                     listPokemon.add(pokemon)
                 }
 
-                _pokemons.value = PokemonWithCount(
+                _pokemons.value = PokemonDtoWithCount(
                     count = response.count,
-                    pokemons = listPokemon.toList()
+                    pokemonsDto = pokemonMap.toEntityList(listPokemon)
                 )
 
                 _pokemonsState.value = NetworkState.Loaded
@@ -83,7 +85,9 @@ class PokemonRepositoryImpl @Inject constructor(
             try {
                 _pokemonState.value = NetworkState.Loading
 
-                _pokemon.postValue(service.getRandomPokemon(idRandom))
+                val response = service.getRandomPokemon(idRandom)
+
+                _pokemon.postValue(pokemonMap.mapFromDomainModel(response))
 
                 _pokemonState.value = NetworkState.Loaded
             } catch (e: Exception) {

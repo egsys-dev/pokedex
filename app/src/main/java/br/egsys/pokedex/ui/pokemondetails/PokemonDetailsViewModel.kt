@@ -1,17 +1,17 @@
 package br.egsys.pokedex.ui.pokemondetails
 
 import androidx.lifecycle.ViewModel
-import br.egsys.pokedex.data.model.Pokemon
+import br.egsys.pokedex.data.dto.PokemonDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonDetailsViewModel @Inject constructor() : ViewModel() {
 
-    var pokemon: Pokemon? = null
+    var pokemonDto: PokemonDto? = null
         private set
 
-    fun setupPokemon(pokemon: Pokemon) {
-        this.pokemon = pokemon
+    fun setupPokemonDto(pokemonDto: PokemonDto) {
+        this.pokemonDto = pokemonDto
     }
 }

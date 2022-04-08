@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.R
+import br.egsys.pokedex.data.dto.PokemonDto
 import br.egsys.pokedex.data.model.NetworkState
-import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.data.model.SearchPokemon
 import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.pokemons.observe(viewLifecycleOwner) {
-            updateList(it.pokemons)
+            updateList(it.pokemonsDto)
         }
 
         viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
                     viewBinding.pokemons.isVisible = false
                 }
                 is SearchPokemon.Loaded -> {
-                    updateList(it.pokemons)
+                    updateList(it.pokemonsDto)
 
                     viewBinding.pokemons.isVisible = true
                 }
@@ -175,7 +175,7 @@ class HomeFragment : Fragment() {
 
             if (text.isNullOrBlank()) {
                 viewModel.pokemons.value?.let {
-                    updateList(it.pokemons)
+                    updateList(it.pokemonsDto)
 
                     setupNameResultSearch(R.string.all_pokemons)
                 }
@@ -189,7 +189,7 @@ class HomeFragment : Fragment() {
 
     private fun setupCleanSearchBarClick() {
         viewBinding.searchBar.setClearSearchButtonClickListener {
-            viewModel.pokemons.value?.pokemons?.let {
+            viewModel.pokemons.value?.pokemonsDto?.let {
                 updateList(it)
             }
         }
@@ -221,7 +221,7 @@ class HomeFragment : Fragment() {
         context?.closeKeyboard(viewBinding.root)
     }
 
-    private fun updateList(pokemons: List<Pokemon>) {
+    private fun updateList(pokemons: List<PokemonDto>) {
         (viewBinding.pokemons.adapter as? PokemonAdapter)?.updateList(pokemons)
     }
 
