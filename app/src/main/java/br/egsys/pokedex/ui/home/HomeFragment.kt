@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
 
         setupAdapter()
         setupPokemonObserver()
-        setupGetPokemonUpdated()
+        setupGetPokemonRandom()
         setupSearchBarClickButton()
         setupSearchBarTextChanged()
         setupCleanSearchBarClick()
@@ -93,18 +93,26 @@ class HomeFragment : Fragment() {
 //                    viewBinding.notPokemonContainer.isVisible = false
                 }
                 is NetworkState.Loading -> {
-//                    viewBinding.loading.isVisible = true
+                    viewBinding.apply {
+                        loading.isVisible = true
+                        pokemons.isVisible = true
+                        pokemons.isClickable = false
+                        emptyPokemon.isVisible = false
+                    }
                 }
                 is NetworkState.Loaded -> {
                     viewBinding.apply {
-//                        loading.isVisible = false
+                        loading.isVisible = false
                         pokemons.isVisible = true
+                        pokemons.isClickable = true
                         emptyPokemon.isVisible = false
                     }
                 }
                 is NetworkState.Failed -> {
                     viewBinding.apply {
                         pokemons.isVisible = false
+                        loading.isVisible = false
+                        pokemons.isClickable = true
 //                        notPokemonContainer.isVisible = true
                     }
                 }
@@ -142,10 +150,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupGetPokemonUpdated() {
-//        viewBinding.getRandomPokemon.setOnClickListener {
-//            viewModel.getRandomPokemon()
-//        }
+    private fun setupGetPokemonRandom() {
+        viewBinding.randomPokemon.setOnClickListener {
+            viewModel.getRandomPokemon()
+        }
     }
 
     private fun setupSearchBarClickButton() {

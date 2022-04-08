@@ -47,7 +47,8 @@ class HomeViewModel @Inject constructor(
 
     fun getRandomPokemon() {
         viewModelScope.launch {
-            pokemonRepository.getRandomPokemon(Random.nextInt(100))
+            val maxValue = pokemons.value?.count
+            pokemonRepository.getRandomPokemon(Random.nextInt(maxValue ?: 100))
         }
     }
 
