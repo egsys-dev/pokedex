@@ -34,12 +34,6 @@ class HomeViewModel @Inject constructor(
         getPokemons()
     }
 
-    fun getPokemonByName(name: String) {
-        viewModelScope.launch {
-            pokemonRepository.getPokemonByName(name)
-        }
-    }
-
     fun getPokemons() {
         viewModelScope.launch {
             pokemonRepository.getPokemons(limit = LIMIT, offSet = offSet)
@@ -65,9 +59,7 @@ class HomeViewModel @Inject constructor(
             if (it.isEmpty()) {
                 _pokemonSearch.postValue(SearchPokemon.Empty)
             } else {
-                _pokemonSearch.postValue(
-                    SearchPokemon.Loaded(it)
-                )
+                _pokemonSearch.postValue(SearchPokemon.Loaded(it))
             }
         }
     }

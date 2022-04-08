@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
         viewBinding.pokemons.layoutManager = layoutManager
 
         viewBinding.pokemons.adapter = PokemonAdapter {
-            viewModel.getPokemonByName(it.name)
+            PokemonDetailsFragment.show(childFragmentManager, it)
         }
 
         viewBinding.pokemons.addOnScrollListener(
@@ -92,14 +92,11 @@ class HomeFragment : Fragment() {
         viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Initial -> {
-//                    viewBinding.loading.isVisible = false
-//                    viewBinding.notPokemonContainer.isVisible = false
                 }
                 is NetworkState.Loading -> {
                     viewBinding.apply {
                         loading.isVisible = true
                         pokemons.isVisible = true
-                        pokemons.isClickable = false
                         emptyPokemon.isVisible = false
                         noConnectionContainer.isVisible = false
                         meetPokemonContainer.isVisible = false
@@ -108,7 +105,6 @@ class HomeFragment : Fragment() {
                 is NetworkState.Loaded -> {
                     viewBinding.apply {
                         pokemons.isVisible = true
-                        pokemons.isClickable = true
                         meetPokemonContainer.isVisible = true
                         emptyPokemon.isVisible = false
                         noConnectionContainer.isVisible = false
@@ -117,9 +113,9 @@ class HomeFragment : Fragment() {
                 }
                 is NetworkState.Failed -> {
                     viewBinding.apply {
+                        noConnectionContainer.isVisible = true
                         pokemons.isVisible = false
                         loading.isVisible = false
-                        noConnectionContainer.isVisible = true
                         meetPokemonContainer.isVisible = false
                     }
                 }
@@ -129,29 +125,20 @@ class HomeFragment : Fragment() {
         viewModel.pokemonSearch.observe(viewLifecycleOwner) {
             when (it) {
                 is SearchPokemon.Loading -> {
-
-                    viewBinding.apply {
-//                        loading.isVisible = true
-//                        notPokemonContainer.isVisible = false
-                        pokemons.isVisible = false
-                    }
+                    viewBinding.pokemons.isVisible = false
                 }
                 is SearchPokemon.Loaded -> {
                     updateList(it.pokemons)
 
-                    viewBinding.apply {
-//                        loading.isVisible = false
-//                        notPokemonContainer.isVisible = false
-                        pokemons.isVisible = true
-                    }
+                    viewBinding.pokemons.isVisible = true
                 }
                 is SearchPokemon.Empty -> {
-
                     viewBinding.apply {
-//                        loading.isVisible = false
                         emptyPokemon.isVisible = true
                         pokemons.isVisible = false
                     }
+                }
+                else -> {
                 }
             }
         }
