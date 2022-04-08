@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import br.egsys.pokedex.data.model.Pokemon
+import br.egsys.pokedex.data.dto.PokemonDto
 import br.egsys.pokedex.databinding.FragmentPokemonDetailsBinding
 import br.egsys.pokedex.extension.firstLetterUpperCase
 import br.egsys.pokedex.ui.basedialog.BaseBottomSheetDialogFragment
@@ -36,42 +36,35 @@ class PokemonDetailsFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun readArgs() {
-        (arguments?.getParcelable(ARG) as? Pokemon)?.let {
-            viewModel.setupPokemon(it)
+        (arguments?.getParcelable(ARG) as? PokemonDto)?.let {
+            viewModel.setupPokemonDto(it)
             setupView(it)
         }
     }
 
-    private fun setupView(pokemon: Pokemon) {
+    private fun setupView(pokemonDto: PokemonDto) {
         viewBinding.apply {
-            Picasso.with(context).load(pokemon.sprites.frontDefault).into(image)
-            name.text = firstLetterUpperCase(pokemon.name)
-            valueWeight.text = "${pokemon.weight}Kg"
-            valueHeight.text = "${pokemon.height}m"
+            Picasso.with(context).load(pokemonDto.image).into(image)
+            name.text = firstLetterUpperCase(pokemonDto.name)
+            valueWeight.text = "${pokemonDto.weight}Kg"
+            valueHeight.text = "${pokemonDto.height}m"
+            type.text = pokemonDto.types
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString(", ")
         }
-
-        val listType = mutableListOf<String>()
-
-        pokemon.types.forEach {
-            listType.add(it.type.name)
-        }
-
-        viewBinding.type.text = listType
-            .takeIf { it.isNotEmpty() }
-            ?.joinToString(", ")
     }
 
     companion object {
         const val TAG = "br.egsys.pokedex.ui.pokemondetails"
         private const val ARG = "arg"
 
-        private fun newInstance(pokemon: Pokemon) = PokemonDetailsFragment().apply {
+        private fun newInstance(pokemonDto: PokemonDto) = PokemonDetailsFragment().apply {
             arguments = bundleOf(
-                ARG to pokemon
+                ARG to pokemonDto
             )
         }
 
-        fun show(fragmentManager: FragmentManager, pokemon: Pokemon) =
-            newInstance(pokemon).show(fragmentManager, TAG)
+        fun show(fragmentManager: FragmentManager, pokemonDto: PokemonDto) =
+            newInstance(pokemonDto).show(fragmentManager, TAG)
     }
 }

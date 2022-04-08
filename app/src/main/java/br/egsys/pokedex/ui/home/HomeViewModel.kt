@@ -1,6 +1,7 @@
 package br.egsys.pokedex.ui.home
 
 import androidx.lifecycle.* // ktlint-disable no-wildcard-imports
+import br.egsys.pokedex.data.dto.PokemonDto
 import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,11 +20,11 @@ class HomeViewModel @Inject constructor(
     val pokemonSearch: LiveData<SearchPokemon> = _pokemonSearch
     var offSet = 0
 
-    val pokemon: LiveData<Pokemon>
+    val pokemon: LiveData<PokemonDto>
         get() = pokemonRepository.pokemon
     val pokemonLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonState.asLiveData()
-    val pokemons: LiveData<PokemonWithCount>
+    val pokemons: LiveData<PokemonDtoWithCount>
         get() = pokemonRepository.pokemons.asLiveData()
     val pokemonsLoadState: LiveData<NetworkState>
         get() = pokemonRepository.pokemonsState.asLiveData()
@@ -32,12 +33,6 @@ class HomeViewModel @Inject constructor(
 
     init {
         getPokemons()
-    }
-
-    fun getPokemonByName(name: String) {
-        viewModelScope.launch {
-            pokemonRepository.getPokemonByName(name)
-        }
     }
 
     fun getPokemons() {
@@ -57,17 +52,15 @@ class HomeViewModel @Inject constructor(
     fun searchPlaylist(term: String) {
         _pokemonSearch.postValue(SearchPokemon.Loading)
 
-        val searchResponse = pokemonRepository.pokemons.value.pokemons.filter {
-            it.name.contains(term, true)
+        val searchResponse = pokemonRepository.pokemons.value.pokemonsDto.filter {
+            it.name.contains(term, true) || it.id.contains(term)
         }
 
         searchResponse.let {
             if (it.isEmpty()) {
                 _pokemonSearch.postValue(SearchPokemon.Empty)
             } else {
-                _pokemonSearch.postValue(
-                    SearchPokemon.Loaded(it)
-                )
+                _pokemonSearch.postValue(SearchPokemon.Loaded(it))
             }
         }
     }
