@@ -7,3 +7,4 @@ mvvm
 room
 lottie
 paris
+dto pattern
