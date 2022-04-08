@@ -53,7 +53,7 @@ class HomeViewModel @Inject constructor(
         _pokemonSearch.postValue(SearchPokemon.Loading)
 
         val searchResponse = pokemonRepository.pokemons.value.pokemonsDto.filter {
-            it.name.contains(term, true)
+            it.name.contains(term, true) || it.id.contains(term)
         }
 
         searchResponse.let {

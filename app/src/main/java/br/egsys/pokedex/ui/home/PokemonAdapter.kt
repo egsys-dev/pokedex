@@ -62,7 +62,7 @@ class PokemonAdapter(
 
             viewBinding.apply {
                 name.text = firstLetterUpperCase(pokemonDto.name)
-                counter.text = "#${bindingAdapterPosition + 1}"
+                counter.text = "#${pokemonDto.id}"
             }
         }
     }
