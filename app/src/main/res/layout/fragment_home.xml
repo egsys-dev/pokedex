@@ -101,7 +101,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/spacing_normal"
             android:overScrollMode="never"
-            tools:listitem="@layout/item_pokemon" />
+            tools:listitem="@layout/view_pokemon_item" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/empty_pokemon"
