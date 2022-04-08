@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<br.egsys.pokedex.ui.common.DefaultBottomSheetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/spacing_x_large">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:background="@drawable/background_image_details"
+        android:paddingVertical="@dimen/spacing_large">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/width_image_pokemon_details"
+            android:layout_height="@dimen/width_image_pokemon_details"
+            android:layout_gravity="center_horizontal" />
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/name"
+        style="@style/text_x_large_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:text="@string/pikachu"
+        android:textColor="@color/black" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/type"
+        style="@style/text_small_dm_sans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Type"
+        android:textColor="@color/black"
+        app:textAllCaps="true" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:layout_marginBottom="@dimen/spacing_x_large"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_item_pokemon"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/value_weight"
+                style="@style/text_normal_space_grotesk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6.9kg"
+                android:textColor="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/type_weight"
+                style="@style/text_small_dm_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tinier"
+                android:text="@string/weight"
+                android:textColor="@color/black" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:background="@drawable/background_item_pokemon"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/value_height"
+                style="@style/text_normal_space_grotesk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6.9m"
+                android:textColor="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/type_height"
+                style="@style/text_small_dm_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tinier"
+                android:text="@string/height"
+                android:textColor="@color/black" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</br.egsys.pokedex.ui.common.DefaultBottomSheetLayout>

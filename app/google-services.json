@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "842644061168",
+    "project_id": "pokedex-challenge-egsys",
+    "storage_bucket": "pokedex-challenge-egsys.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842644061168:android:6475f19e07fa64eabc7b35",
+        "android_client_info": {
+          "package_name": "br.egsys.pokedex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842644061168-47nhni9sn433v8knj9shc5dc0128g2ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALNyK6xnMVjOdfP47rTymiX-XpnHx1xh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842644061168-47nhni9sn433v8knj9shc5dc0128g2ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842644061168:android:c4121f62e248b697bc7b35",
+        "android_client_info": {
+          "package_name": "br.pokedex.egsys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842644061168-47nhni9sn433v8knj9shc5dc0128g2ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALNyK6xnMVjOdfP47rTymiX-XpnHx1xh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842644061168-47nhni9sn433v8knj9shc5dc0128g2ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/pink_primary</item>
+        <item name="android:statusBarColor">@color/pink_primary</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:colorEdgeEffect">@color/colorAccent</item>
+        <item name="background">@color/pink_primary</item>
+        <item name="android:colorBackground">@color/pink_primary</item>
+        <item name="android:windowBackground">@color/pink_primary</item>
+
+        <item name="colorBackgroundDefault">@android:color/transparent</item>"
+        <item name="colorTextPrimary">@color/white</item>
+        <item name="colorTextSecondary">@color/colorPrimary</item>
+        <item name="colorHintText">@color/smoke</item>
+    </style>
+
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="TransparentBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/TransparentBottomSheetDialogStyle</item>
+    </style>
+
+    <style name="TransparentBottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="TextTitleMedium">
+        <item name="android:textSize">@dimen/spacing_normal</item>
+        <item name="lineHeight">@dimen/font_title_large</item>
+    </style>
+
+    <style name="TextTitleXLarge">
+        <item name="android:textSize">@dimen/spacing_x_large</item>
+        <item name="lineHeight">@dimen/font_title_large</item>
+    </style>
+
+    <style name="text_big">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_big</item>
+        <item name="fontFamily">@font/space_grotesk_bold</item>
+    </style>
+
+    <style name="text_x_large_bold">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_x_large</item>
+        <item name="fontFamily">@font/space_grotesk_bold</item>
+    </style>
+
+    <style name="text_x_large">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_x_large</item>
+        <item name="fontFamily">@font/dm_sans_regular</item>
+    </style>
+
+    <style name="text_large">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_large</item>
+        <item name="fontFamily">@font/dm_sans_regular</item>
+    </style>
+
+    <style name="text_normal_space_grotesk">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_normal</item>
+        <item name="fontFamily">@font/space_grotesk_medium</item>
+    </style>
+
+    <style name="text_large_space_grotesk">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_large</item>
+        <item name="fontFamily">@font/space_grotesk_bold</item>
+    </style>
+
+    <style name="text_normal_dm_sans_regular">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_normal</item>
+        <item name="fontFamily">@font/dm_sans_regular</item>
+    </style>
+
+    <style name="text_small">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_small</item>
+        <item name="fontFamily">@font/space_grotesk_regular</item>
+    </style>
+
+    <style name="text_small_dm_sans">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_small</item>
+        <item name="fontFamily">@font/dm_sans_regular</item>
+    </style>
+
+    <style name="text_normal">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_normal</item>
+        <item name="fontFamily">@font/space_grotesk_regular</item>
+    </style>
+
+    <style name="text_button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_title_normal</item> // DM sans
+        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@font/space_grotesk_regular</item>
+    </style>
+
+    <style name="SearchEditTextStyle">
+        <item name="android:background">@drawable/background_text_input</item>
+        <item name="drawableStartCompat">@drawable/ic_search</item>
+        <item name="android:drawablePadding">@dimen/spacing_small</item>
+        <item name="android:textAppearance">@style/TextTitleMedium</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+        <item name="maxLines">1</item>
+        <item name="android:paddingStart">@dimen/spacing_normal</item>
+        <item name="android:paddingEnd">@dimen/spacing_normal</item>
+        <item name="android:paddingTop">@dimen/spacing_middle</item>
+        <item name="android:paddingBottom">@dimen/spacing_middle</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+</resources>

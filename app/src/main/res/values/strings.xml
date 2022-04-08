@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">Pokedéx</string>
+    <string name="app_name">Pokédex</string>
+    <string name="search">Pesquisar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="pokemon_not_exist">Esse pokémon não existe</string>
+    <string name="home_description">Encontre seu pokémon pesquisando pelo nome ou por seu Código Pokédex.</string>
+    <string name="all_pokemons">Todos os pokémons</string>
+    <string name="pikachu">Pikachu</string>
+    <string name="counter">#001</string>
+    <string name="meet_a_pokemon">Conhecer um pokémon</string>
+    <string name="empty_pokemon">Nenhum pokemon encontrado.</string>
+    <string name="result_search">Resultado da pesquisa</string>
+    <string name="Type">type</string>
+    <string name="height">Altura</string>
+    <string name="weight">Peso</string>
+    <string name="no_connection">Sem conexão com a internet</string>
+    <string name="no_connection_description">Não foi possível carregar os seus pokemons.  Verifique sua conexão e tente novamente.</string>
+    <string name="try_again">Tentar novamente</string>
 </resources>
