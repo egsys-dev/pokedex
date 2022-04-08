@@ -1,8 +1,6 @@
 package br.egsys.pokedex.data.model
 
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -13,7 +11,7 @@ data class Pokemon(
     val sprites: Sprites,
     val types: List<PokemonType>,
     val weight: Long,
-    val height: Long
+    val height: Long,
 ) : Parcelable
 
 @Parcelize

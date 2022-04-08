@@ -2,10 +2,12 @@ package br.egsys.pokedex.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.egsys.pokedex.data.dto.PokemonDto
 import br.egsys.pokedex.data.model.NetworkState
 import br.egsys.pokedex.data.model.Pokemon
 import br.egsys.pokedex.data.model.PokemonWithCount
 import br.egsys.pokedex.data.service.Service
+import br.egsys.pokedex.data.util.DomainMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +15,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
-    private val service: Service
+    private val service: Service,
+    private val pokemonMap: DomainMapper<PokemonDto, Pokemon>
 ) : PokemonRepository {
 
     private val _pokemon = MutableLiveData<Pokemon>()
