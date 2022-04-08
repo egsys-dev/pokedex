@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.R
 import br.egsys.pokedex.data.model.Pokemon
-import br.egsys.pokedex.databinding.ItemPokemonBinding
-import br.egsys.pokedex.extension.firstLetterUpperCase
+import br.egsys.pokedex.databinding.ViewPokemonItemBinding
 import br.egsys.pokedex.extension.inflate
 import com.squareup.picasso.Picasso
 
@@ -18,7 +17,7 @@ class PokemonAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder =
         PokemonViewHolder(
-            parent.inflate(R.layout.item_pokemon, false),
+            parent.inflate(R.layout.view_pokemon_item, false),
             onItemClicked
         )
 
@@ -42,11 +41,11 @@ class PokemonAdapter(
         view: View,
         private val onItemClicked: (pokemons: Pokemon) -> Unit
     ) : RecyclerView.ViewHolder(view) {
-        private val viewBinding = ItemPokemonBinding.bind(itemView)
+        private val viewBinding = ViewPokemonItemBinding.bind(itemView)
         private var pokemon: Pokemon? = null
 
         init {
-            itemView.setOnClickListener {
+            viewBinding.container.setOnClickListener {
                 pokemon?.let {
                     onItemClicked(it)
                 }
@@ -61,8 +60,8 @@ class PokemonAdapter(
                 .into(viewBinding.image)
 
             viewBinding.apply {
-                name.text = firstLetterUpperCase(pokemon.name)
-                counter.text = "#${pokemon.id}"
+                name.text = pokemon.name
+                counter.text = "#${bindingAdapterPosition + 1}"
             }
         }
     }
