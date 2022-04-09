@@ -108,13 +108,28 @@ class HomeFragment : Fragment() {
                 is PokemonsState.Initial -> {
                 }
                 is PokemonsState.Loading -> {
+                    viewBinding.apply {
+                        loading.isVisible = true
+                        randomPokemon.isVisible = false
+                        noConnectionContainer.isVisible = false
+                    }
                 }
                 is PokemonsState.Loaded -> {
+                    viewBinding.apply {
+                        pokemons.isVisible = true
+                        loading.isVisible = false
+                        randomPokemon.isVisible = true
+                    }
                     updateList(it.pokemons)
                 }
                 is PokemonsState.Failed -> {
                     if (it.exception is UnknownHostException) {
-//                        viewBinding.
+                        viewBinding.apply {
+                            noConnectionContainer.isVisible = true
+                            loading.isVisible = false
+                            pokemons.isVisible = false
+                            randomPokemon.isVisible = false
+                        }
                     }
                 }
             }
