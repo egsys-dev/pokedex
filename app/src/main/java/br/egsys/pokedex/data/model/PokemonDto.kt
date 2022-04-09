@@ -1,4 +1,4 @@
-package br.egsys.pokedex.data.dto
+package br.egsys.pokedex.data.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

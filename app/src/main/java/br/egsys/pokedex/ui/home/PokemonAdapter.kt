@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.R
-import br.egsys.pokedex.data.dto.PokemonDto
+import br.egsys.pokedex.data.model.PokemonView
 import br.egsys.pokedex.databinding.ViewPokemonItemBinding
 import br.egsys.pokedex.extension.firstLetterUpperCase
 import br.egsys.pokedex.extension.inflate
 import com.squareup.picasso.Picasso
 
 class PokemonAdapter(
-    private val onItemClicked: (pokemonsDto: PokemonDto) -> Unit
-) : ListAdapter<PokemonDto, PokemonAdapter.PokemonViewHolder>(diffCallback) {
+    private val onItemClicked: (pokemonsView: PokemonView) -> Unit
+) : ListAdapter<PokemonView, PokemonAdapter.PokemonViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder =
         PokemonViewHolder(
@@ -28,51 +28,51 @@ class PokemonAdapter(
         }
     }
 
-    fun updateList(pokemonsDto: List<PokemonDto>) {
+    fun updateList(pokemonsView: List<PokemonView>) {
         val currentListToUpdated = currentList.toMutableList()
 
-        pokemonsDto.forEach {
+        pokemonsView.forEach {
             currentListToUpdated.add(it)
         }
 
-        submitList(pokemonsDto)
+        submitList(pokemonsView)
     }
 
     inner class PokemonViewHolder(
         view: View,
-        private val onItemClicked: (pokemonsDto: PokemonDto) -> Unit
+        private val onItemClicked: (pokemonsView: PokemonView) -> Unit
     ) : RecyclerView.ViewHolder(view) {
         private val viewBinding = ViewPokemonItemBinding.bind(itemView)
-        private var pokemonDto: PokemonDto? = null
+        private var pokemonsView: PokemonView? = null
 
         init {
             viewBinding.container.setOnClickListener {
-                pokemonDto?.let {
+                pokemonsView?.let {
                     onItemClicked(it)
                 }
             }
         }
 
-        fun bind(pokemonDto: PokemonDto) {
-            this.pokemonDto = pokemonDto
+        fun bind(pokemonsView: PokemonView) {
+            this.pokemonsView = pokemonsView
 
             Picasso.with(viewBinding.root.context)
-                .load(pokemonDto.image)
+                .load(pokemonsView.image)
                 .into(viewBinding.image)
 
             viewBinding.apply {
-                name.text = firstLetterUpperCase(pokemonDto.name)
-                counter.text = "#${pokemonDto.id}"
+                name.text = firstLetterUpperCase(pokemonsView.name)
+                counter.text = "#${pokemonsView.id}"
             }
         }
     }
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<PokemonDto>() {
-            override fun areItemsTheSame(oldItem: PokemonDto, newItem: PokemonDto): Boolean =
+        val diffCallback = object : DiffUtil.ItemCallback<PokemonView>() {
+            override fun areItemsTheSame(oldItem: PokemonView, newItem: PokemonView): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: PokemonDto, newItem: PokemonDto): Boolean =
+            override fun areContentsTheSame(oldItem: PokemonView, newItem: PokemonView): Boolean =
                 oldItem == newItem
         }
     }

@@ -1,6 +1,7 @@
 package br.egsys.pokedex.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,16 +9,19 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.egsys.pokedex.R
-import br.egsys.pokedex.data.dto.PokemonDto
-import br.egsys.pokedex.data.model.NetworkState
+import br.egsys.pokedex.data.model.PokemonView
+import br.egsys.pokedex.data.model.PokemonsState
 import br.egsys.pokedex.data.model.SearchPokemon
 import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
 import br.egsys.pokedex.ui.pokemondetails.PokemonDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -43,6 +47,8 @@ class HomeFragment : Fragment() {
 
         setupAdapter()
         setupPokemonObserver()
+        setupPokemonsObserver()
+        setupPokemonSearchedObserver()
         setupGetPokemonRandom()
         setupTryAgain()
         setupSearchBarClickButton()
@@ -68,7 +74,7 @@ class HomeFragment : Fragment() {
                     val offSet = viewModel.offSet
 
                     if (offSet == lastVisibleItem + 1) {
-                        if (viewModel.resquestPagination.value == NetworkState.Loaded) {
+                        if (viewModel.pokemons.value is PokemonsState.Loaded) {
                             viewModel.getPokemons()
                         }
                     }
@@ -78,67 +84,63 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupPokemonObserver() {
-        viewModel.pokemon.observe(viewLifecycleOwner) {
-            PokemonDetailsFragment.show(childFragmentManager, it)
-        }
-
-        viewModel.pokemonLoadState.observe(viewLifecycleOwner) {
-        }
-
-        viewModel.pokemons.observe(viewLifecycleOwner) {
-            updateList(it.pokemonsDto)
-        }
-
-        viewModel.pokemonsLoadState.observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkState.Initial -> {
-                }
-                is NetworkState.Loading -> {
-                    viewBinding.apply {
-                        loading.isVisible = true
-                        pokemons.isVisible = true
-                        emptyPokemon.isVisible = false
-                        noConnectionContainer.isVisible = false
-                        meetPokemonContainer.isVisible = false
+        lifecycleScope.launchWhenStarted {
+            viewModel.pokemon.collect {
+                when (it) {
+                    is PokemonsState.Initial -> {
                     }
-                }
-                is NetworkState.Loaded -> {
-                    viewBinding.apply {
-                        pokemons.isVisible = true
-                        meetPokemonContainer.isVisible = true
-                        emptyPokemon.isVisible = false
-                        noConnectionContainer.isVisible = false
-                        loading.isVisible = false
+                    is PokemonsState.Loading -> {
                     }
-                }
-                is NetworkState.Failed -> {
-                    viewBinding.apply {
-                        noConnectionContainer.isVisible = true
-                        pokemons.isVisible = false
-                        loading.isVisible = false
-                        meetPokemonContainer.isVisible = false
+                    is PokemonsState.Loaded -> {
+                        PokemonDetailsFragment.show(childFragmentManager, it.pokemons.first())
+                    }
+                    is PokemonsState.Failed -> {
+                        Log.d("FAILED-POKEMON", it.exception.toString())
                     }
                 }
             }
         }
+    }
 
-        viewModel.pokemonSearch.observe(viewLifecycleOwner) {
+    private fun setupPokemonsObserver() {
+        viewModel.pokemons.observe(viewLifecycleOwner) {
             when (it) {
-                is SearchPokemon.Loading -> {
-                    viewBinding.pokemons.isVisible = false
+                is PokemonsState.Initial -> {
                 }
-                is SearchPokemon.Loaded -> {
-                    updateList(it.pokemonsDto)
-
-                    viewBinding.pokemons.isVisible = true
+                is PokemonsState.Loading -> {
                 }
-                is SearchPokemon.Empty -> {
-                    viewBinding.apply {
-                        emptyPokemon.isVisible = true
-                        pokemons.isVisible = false
+                is PokemonsState.Loaded -> {
+                    updateList(it.pokemons)
+                }
+                is PokemonsState.Failed -> {
+                    if (it.exception is UnknownHostException) {
+//                        viewBinding.
                     }
                 }
-                else -> {
+            }
+        }
+    }
+
+    private fun setupPokemonSearchedObserver() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.pokemonSearched.collect {
+                when (it) {
+                    is SearchPokemon.Loading -> {
+                        viewBinding.pokemons.isVisible = false
+                    }
+                    is SearchPokemon.Loaded -> {
+                        updateList(it.pokemonsView)
+
+                        viewBinding.pokemons.isVisible = true
+                    }
+                    is SearchPokemon.Empty -> {
+                        viewBinding.apply {
+                            emptyPokemon.isVisible = true
+                            pokemons.isVisible = false
+                        }
+                    }
+                    else -> {
+                    }
                 }
             }
         }
@@ -172,14 +174,6 @@ class HomeFragment : Fragment() {
     private fun setupSearchBarTextChanged() {
         viewBinding.searchBar.doOnTextChanged { text, start, before, count ->
             viewModel.searchPlaylist(text.toString())
-
-            if (text.isNullOrBlank()) {
-                viewModel.pokemons.value?.let {
-                    updateList(it.pokemonsDto)
-
-                    setupNameResultSearch(R.string.all_pokemons)
-                }
-            }
         }
     }
 
@@ -189,9 +183,8 @@ class HomeFragment : Fragment() {
 
     private fun setupCleanSearchBarClick() {
         viewBinding.searchBar.setClearSearchButtonClickListener {
-            viewModel.pokemons.value?.pokemonsDto?.let {
-                updateList(it)
-            }
+            updateList((viewModel.pokemons.value as PokemonsState.Loaded).pokemons)
+            viewBinding.searchBar.text = null
         }
     }
 
@@ -221,7 +214,7 @@ class HomeFragment : Fragment() {
         context?.closeKeyboard(viewBinding.root)
     }
 
-    private fun updateList(pokemons: List<PokemonDto>) {
+    private fun updateList(pokemons: List<PokemonView>) {
         (viewBinding.pokemons.adapter as? PokemonAdapter)?.updateList(pokemons)
     }
 

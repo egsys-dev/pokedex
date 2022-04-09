@@ -1,13 +1,8 @@
 package br.egsys.pokedex.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import br.egsys.pokedex.data.dto.PokemonDto
-import br.egsys.pokedex.data.model.NetworkState
-import br.egsys.pokedex.data.model.Pokemon
-import br.egsys.pokedex.data.model.PokemonDtoWithCount
+import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
+import br.egsys.pokedex.data.model.Pokemon.Companion.mapToPokemonView
 import br.egsys.pokedex.data.service.Service
-import br.egsys.pokedex.data.util.DomainMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,83 +11,43 @@ import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val service: Service,
-    private val pokemonMap: DomainMapper<PokemonDto, Pokemon>
 ) : PokemonRepository {
 
-    private val _pokemon = MutableLiveData<PokemonDto>()
-    private val _pokemons = MutableStateFlow(PokemonDtoWithCount())
-    private val _pokemonState = MutableStateFlow<NetworkState>(NetworkState.Initial)
-    private val _pokemonsState = MutableStateFlow<NetworkState>(NetworkState.Initial)
-    private val _paginationState = MutableStateFlow<NetworkState>(NetworkState.Initial)
+    private val listPokemonView = mutableListOf<PokemonView>()
+    private val _listPokemons = MutableStateFlow<List<PokemonView>>(emptyList())
 
-    override val pokemon: LiveData<PokemonDto> = _pokemon
-    override val pokemons: StateFlow<PokemonDtoWithCount> = _pokemons
-    override val pokemonState: StateFlow<NetworkState> = _pokemonState
-    override val pokemonsState: StateFlow<NetworkState> = _pokemonsState
-    override val paginationState: StateFlow<NetworkState> = _paginationState
+    override val listPokemons: StateFlow<List<PokemonView>> get() = _listPokemons
 
-    private var listPokemon = mutableListOf<Pokemon>()
-
-    override suspend fun getPokemonByName(name: String) {
+    override suspend fun getPokemons(limit: Int, offSet: Int): PokemonsState =
         withContext(Dispatchers.IO) {
             try {
-                _pokemonState.value = NetworkState.Loading
-
-                val response = service.getPokemonByName(name)
-
-                _pokemon.postValue(pokemonMap.mapFromDomainModel(response))
-
-                _pokemonState.value = NetworkState.Loaded
-            } catch (e: Exception) {
-                _pokemonState.value = NetworkState.Failed(e)
-            }
-        }
-    }
-
-    override suspend fun getPokemons(limit: Int, offSet: Int) {
-        withContext(Dispatchers.IO) {
-            try {
-                _pokemonsState.value = NetworkState.Loading
-                _paginationState.value = NetworkState.Loading
-
                 val response = service.getPokemons(
                     limit = limit,
                     offSet = offSet
                 )
 
-                response.results.forEach {
+                response.results.map {
                     val pokemon = service.getPokemonByName(it.name)
 
-                    listPokemon.add(pokemon)
+                    listPokemonView.add(mapToPokemonView(pokemon))
                 }
 
-                _pokemons.value = PokemonDtoWithCount(
-                    count = response.count,
-                    pokemonsDto = pokemonMap.toEntityList(listPokemon)
-                )
+                _listPokemons.value = listPokemonView
 
-                _pokemonsState.value = NetworkState.Loaded
-                _paginationState.value = NetworkState.Loaded
+                PokemonsState.Loaded(listPokemonView.toList())
             } catch (e: Exception) {
-                _pokemonsState.value = NetworkState.Failed(e)
-                _paginationState.value = NetworkState.Loaded
+                PokemonsState.Failed(e)
             }
         }
-    }
 
-    override suspend fun getRandomPokemon(idRandom: Int) {
+    override suspend fun getRandomPokemon(idRandom: Int): PokemonsState =
         withContext(Dispatchers.IO) {
             try {
-                _pokemonState.value = NetworkState.Loading
-
                 val response = service.getRandomPokemon(idRandom)
 
-                _pokemon.postValue(pokemonMap.mapFromDomainModel(response))
-
-                _pokemonState.value = NetworkState.Loaded
+                PokemonsState.Loaded(listOf(mapToPokemonView(response)))
             } catch (e: Exception) {
-                _pokemonState.value = NetworkState.Failed(e)
+                PokemonsState.Failed(e)
             }
         }
-    }
 }
