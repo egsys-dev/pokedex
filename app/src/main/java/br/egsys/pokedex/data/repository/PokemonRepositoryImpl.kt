@@ -4,8 +4,6 @@ import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.model.Pokemon.Companion.mapToPokemonView
 import br.egsys.pokedex.data.service.Service
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -14,9 +12,6 @@ class PokemonRepositoryImpl @Inject constructor(
 ) : PokemonRepository {
 
     private val listPokemonView = mutableListOf<PokemonView>()
-    private val _listPokemons = MutableStateFlow<List<PokemonView>>(emptyList())
-
-    override val listPokemons: StateFlow<List<PokemonView>> get() = _listPokemons
 
     override suspend fun getPokemons(limit: Int, offSet: Int): PokemonsState =
         withContext(Dispatchers.IO) {
@@ -32,7 +27,7 @@ class PokemonRepositoryImpl @Inject constructor(
                     listPokemonView.add(mapToPokemonView(pokemon))
                 }
 
-                _listPokemons.value = listPokemonView
+//                _listPokemons.value = listPokemonView
 
                 PokemonsState.Loaded(listPokemonView.toList())
             } catch (e: Exception) {
