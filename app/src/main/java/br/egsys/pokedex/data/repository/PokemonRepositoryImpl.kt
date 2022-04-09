@@ -27,8 +27,6 @@ class PokemonRepositoryImpl @Inject constructor(
                     listPokemonView.add(mapToPokemonView(pokemon))
                 }
 
-//                _listPokemons.value = listPokemonView
-
                 PokemonsState.Loaded(listPokemonView.toList())
             } catch (e: Exception) {
                 PokemonsState.Failed(e)
