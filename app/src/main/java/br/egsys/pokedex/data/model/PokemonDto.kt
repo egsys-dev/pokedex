@@ -15,4 +15,17 @@ data class PokemonDto(
     val weight: Int,
     val height: Int,
     val image: String
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+        fun mapPokemonDtoToPokemonView(pokemonDto: PokemonDto): PokemonView =
+            PokemonView(
+                id = pokemonDto.id,
+                name = pokemonDto.name,
+                types = pokemonDto.types,
+                weight = pokemonDto.weight,
+                height = pokemonDto.height,
+                image = pokemonDto.image
+            )
+    }
+}

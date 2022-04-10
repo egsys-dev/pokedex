@@ -1,5 +1,6 @@
 package br.egsys.pokedex.di
 
+import br.egsys.pokedex.data.dao.PokemonDao
 import br.egsys.pokedex.data.repository.PokemonRepositoryImpl
 import br.egsys.pokedex.data.service.Service
 import dagger.Module
@@ -44,5 +45,6 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun providesRepository(service: Service) = PokemonRepositoryImpl(service)
+    fun providesRepository(service: Service, pokemonDao: PokemonDao) =
+        PokemonRepositoryImpl(service, pokemonDao)
 }

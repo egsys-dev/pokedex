@@ -1,5 +1,6 @@
 package br.egsys.pokedex.data.repository
 
+import br.egsys.pokedex.data.dao.PokemonDao
 import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.model.Pokemon.Companion.mapToPokemonView
 import br.egsys.pokedex.data.service.Service
@@ -9,6 +10,7 @@ import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val service: Service,
+    private val pokemonDao: PokemonDao
 ) : PokemonRepository {
 
     private val listPokemonView = mutableListOf<PokemonView>()
