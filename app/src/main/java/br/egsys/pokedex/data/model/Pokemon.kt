@@ -16,16 +16,15 @@ data class Pokemon(
 
     companion object {
         fun mapToPokemonDTO(pokemon: Pokemon): PokemonDto {
-            val listTypes = mutableListOf<String>()
-
-            pokemon.types.map {
-                listTypes.add(it.type.name)
-            }
+            val types = pokemon.types
+                .map { it.type.name }
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString(", ") ?: ""
 
             return PokemonDto(
                 id = pokemon.id.toString(),
                 name = pokemon.name,
-                types = listTypes.toList(),
+                types = types,
                 weight = pokemon.weight.toInt(),
                 height = pokemon.height.toInt(),
                 image = pokemon.sprites.frontDefault
@@ -33,16 +32,15 @@ data class Pokemon(
         }
 
         fun mapToPokemonView(pokemon: Pokemon): PokemonView {
-            val listTypes = mutableListOf<String>()
-
-            pokemon.types.map {
-                listTypes.add(it.type.name)
-            }
+            val types = pokemon.types
+                .map { it.type.name }
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString(", ") ?: ""
 
             return PokemonView(
                 id = pokemon.id.toString(),
                 name = pokemon.name,
-                types = listTypes.toList(),
+                types = types,
                 weight = pokemon.weight.toInt(),
                 height = pokemon.height.toInt(),
                 image = pokemon.sprites.frontDefault

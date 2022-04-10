@@ -49,8 +49,6 @@ class PokemonDetailsFragment : BaseBottomSheetDialogFragment() {
             valueWeight.text = "${pokemonView.weight}Kg"
             valueHeight.text = "${pokemonView.height}m"
             type.text = pokemonView.types
-                .takeIf { it.isNotEmpty() }
-                ?.joinToString(", ")
         }
     }
 
