@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class PokemonView(
     val id: String,
     val name: String,
-    val types: List<String>,
+    val types: String,
     val weight: Int,
     val height: Int,
     val image: String
