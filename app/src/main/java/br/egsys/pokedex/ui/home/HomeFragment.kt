@@ -16,12 +16,13 @@ import br.egsys.pokedex.R
 import br.egsys.pokedex.data.model.PokemonView
 import br.egsys.pokedex.data.model.PokemonsState
 import br.egsys.pokedex.data.model.SearchPokemon
+import br.egsys.pokedex.data.util.EmptyLibraryException
+import br.egsys.pokedex.data.util.HasPokemonInDBException
 import br.egsys.pokedex.databinding.FragmentHomeBinding
 import br.egsys.pokedex.extension.closeKeyboard
 import br.egsys.pokedex.ui.pokemondetails.PokemonDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
         setupPokemonSearchedObserver()
         setupGetPokemonRandom()
         setupTryAgain()
+        setupRefresh()
         setupSearchBarClickButton()
         setupSearchBarTextChanged()
         setupCleanSearchBarClick()
@@ -109,26 +111,56 @@ class HomeFragment : Fragment() {
                 }
                 is PokemonsState.Loading -> {
                     viewBinding.apply {
-                        loading.isVisible = true
                         randomPokemon.isVisible = false
                         noConnectionContainer.isVisible = false
+                        emptyPokemon.isVisible = false
+                        noConnectionSmall.isVisible = false
+                        refreshConnection.isVisible = false
+                    }
+
+                    if ((viewBinding.pokemons as? PokemonAdapter)?.currentList?.isEmpty() == true) {
+                        viewBinding.loading.isVisible = true
+                    } else {
+                        viewBinding.loadingDote.isVisible = true
                     }
                 }
                 is PokemonsState.Loaded -> {
                     viewBinding.apply {
                         pokemons.isVisible = true
                         loading.isVisible = false
+                        loadingDote.isVisible = false
                         randomPokemon.isVisible = true
                     }
                     updateList(it.pokemons)
                 }
                 is PokemonsState.Failed -> {
-                    if (it.exception is UnknownHostException) {
-                        viewBinding.apply {
-                            noConnectionContainer.isVisible = true
-                            loading.isVisible = false
-                            pokemons.isVisible = false
-                            randomPokemon.isVisible = false
+                    viewBinding.apply {
+                        loading.isVisible = false
+                        loadingDote.isVisible = false
+                        randomPokemon.isVisible = false
+                        refreshConnection.isVisible = true
+                    }
+
+                    when (it.exception) {
+                        is EmptyLibraryException -> {
+                            viewBinding.apply {
+                                emptyPokemon.isVisible = true
+                                noConnectionContainer.isVisible = true
+                                pokemons.isVisible = false
+                            }
+                        }
+                        is HasPokemonInDBException -> {
+                            viewBinding.apply {
+                                noConnectionSmall.isVisible = true
+                                pokemons.isVisible = true
+                            }
+                        }
+                        else -> {
+                            viewBinding.apply {
+                                noConnectionContainer.isVisible = true
+                                pokemons.isVisible = false
+                                randomPokemon.isVisible = false
+                            }
                         }
                     }
                 }
@@ -164,6 +196,12 @@ class HomeFragment : Fragment() {
     private fun setupGetPokemonRandom() {
         viewBinding.randomPokemon.setOnClickListener {
             viewModel.getRandomPokemon()
+        }
+    }
+
+    private fun setupRefresh() {
+        viewBinding.refreshConnection.setOnClickListener {
+            viewModel.getPokemons()
         }
     }
 

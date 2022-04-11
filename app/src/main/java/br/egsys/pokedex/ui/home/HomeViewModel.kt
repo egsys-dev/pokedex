@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
             val response = pokemonRepository.getPokemons(limit = LIMIT, offSet = offSet)
 
             if (response is PokemonsState.Loaded) {
-                offSet += OFF_SET_VARIATION
+                offSet = response.offSet
             }
 
             _pokemons.postValue(response)

@@ -16,4 +16,5 @@
     <string name="no_connection">Sem conexão com a internet</string>
     <string name="no_connection_description">Não foi possível carregar os seus pokemons.  Verifique sua conexão e tente novamente.</string>
     <string name="try_again">Tentar novamente</string>
+    <string name="reload">Recarregar</string>
 </resources>

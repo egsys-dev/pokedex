@@ -15,7 +15,7 @@ data class Pokemon(
 ) : Parcelable {
 
     companion object {
-        fun mapToPokemonDTO(pokemon: Pokemon): PokemonDto {
+        fun mapToPokemonDTO(pokemon: Pokemon, offSet: Int): PokemonDto {
             val types = pokemon.types
                 .map { it.type.name }
                 .takeIf { it.isNotEmpty() }
@@ -23,6 +23,7 @@ data class Pokemon(
 
             return PokemonDto(
                 id = pokemon.id.toString(),
+//                offSet = offSet,
                 name = pokemon.name,
                 types = types,
                 weight = pokemon.weight.toInt(),
