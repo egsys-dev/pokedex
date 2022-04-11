@@ -1,13 +1,13 @@
-package br.egsys.pokedex.data.dto
+package br.egsys.pokedex.data.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PokemonDto(
+data class PokemonView(
     val id: String,
     val name: String,
-    val types: List<String>,
+    val types: String,
     val weight: Int,
     val height: Int,
     val image: String

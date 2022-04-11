@@ -1,10 +1,10 @@
 package br.egsys.pokedex.ui.home
 
 import androidx.lifecycle.* // ktlint-disable no-wildcard-imports
-import br.egsys.pokedex.data.dto.PokemonDto
 import br.egsys.pokedex.data.model.* // ktlint-disable no-wildcard-imports
 import br.egsys.pokedex.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,22 +14,15 @@ import kotlin.random.Random
 class HomeViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
+    var offSet = OFF_SET_INITIAL
 
-    private val _pokemonSearch: MutableLiveData<SearchPokemon> = MutableLiveData()
+    private val _pokemons = MutableLiveData<PokemonsState>(PokemonsState.Initial)
+    private val _pokemon = MutableStateFlow<PokemonsState>(PokemonsState.Initial)
+    private val _pokemonsSearched = MutableStateFlow<SearchPokemon>(SearchPokemon.Initial)
 
-    val pokemonSearch: LiveData<SearchPokemon> = _pokemonSearch
-    var offSet = 0
-
-    val pokemon: LiveData<PokemonDto>
-        get() = pokemonRepository.pokemon
-    val pokemonLoadState: LiveData<NetworkState>
-        get() = pokemonRepository.pokemonState.asLiveData()
-    val pokemons: LiveData<PokemonDtoWithCount>
-        get() = pokemonRepository.pokemons.asLiveData()
-    val pokemonsLoadState: LiveData<NetworkState>
-        get() = pokemonRepository.pokemonsState.asLiveData()
-    val resquestPagination: StateFlow<NetworkState>
-        get() = pokemonRepository.paginationState
+    val pokemons: LiveData<PokemonsState> = _pokemons
+    val pokemon: StateFlow<PokemonsState> get() = _pokemon
+    val pokemonSearched: StateFlow<SearchPokemon> get() = _pokemonsSearched
 
     init {
         getPokemons()
@@ -37,35 +30,48 @@ class HomeViewModel @Inject constructor(
 
     fun getPokemons() {
         viewModelScope.launch {
-            pokemonRepository.getPokemons(limit = LIMIT, offSet = offSet)
-            offSet += 20
+            _pokemons.postValue(PokemonsState.Loading)
+
+            val response = pokemonRepository.getPokemons(limit = LIMIT, offSet = offSet)
+
+            if (response is PokemonsState.Loaded) {
+                offSet = response.offSet
+            }
+
+            _pokemons.postValue(response)
         }
     }
 
     fun getRandomPokemon() {
         viewModelScope.launch {
-            val maxValue = pokemons.value?.count
-            pokemonRepository.getRandomPokemon(Random.nextInt(maxValue ?: 100))
+            _pokemon.value = PokemonsState.Loading
+
+            val response = pokemonRepository.getRandomPokemon(Random.nextInt(100))
+
+            _pokemon.value = response
         }
     }
 
     fun searchPlaylist(term: String) {
-        _pokemonSearch.postValue(SearchPokemon.Loading)
+        _pokemonsSearched.value = SearchPokemon.Loading
 
-        val searchResponse = pokemonRepository.pokemons.value.pokemonsDto.filter {
-            it.name.contains(term, true) || it.id.contains(term)
-        }
-
-        searchResponse.let {
-            if (it.isEmpty()) {
-                _pokemonSearch.postValue(SearchPokemon.Empty)
-            } else {
-                _pokemonSearch.postValue(SearchPokemon.Loaded(it))
+        if (_pokemons.value is PokemonsState.Loaded) {
+            val searchResponse = (_pokemons.value as PokemonsState.Loaded).pokemons.filter {
+                it.name.contains(term, true) || it.id.contains(term)
+            }
+            searchResponse.let {
+                if (it.isEmpty()) {
+                    _pokemonsSearched.value = SearchPokemon.Empty
+                } else {
+                    _pokemonsSearched.value = SearchPokemon.Loaded(it)
+                }
             }
         }
     }
 
     companion object {
         const val LIMIT = 20
+        const val OFF_SET_INITIAL = 0
+        const val OFF_SET_VARIATION = 20
     }
 }

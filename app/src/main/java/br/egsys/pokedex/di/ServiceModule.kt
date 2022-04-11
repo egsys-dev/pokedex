@@ -1,10 +1,8 @@
 package br.egsys.pokedex.di
 
-import br.egsys.pokedex.data.dto.PokemonDto
-import br.egsys.pokedex.data.model.Pokemon
+import br.egsys.pokedex.data.dao.PokemonDao
 import br.egsys.pokedex.data.repository.PokemonRepositoryImpl
 import br.egsys.pokedex.data.service.Service
-import br.egsys.pokedex.data.util.DomainMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +45,6 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun providesRepository(service: Service, pokemonMap: DomainMapper<PokemonDto, Pokemon>) =
-        PokemonRepositoryImpl(service, pokemonMap)
+    fun providesRepository(service: Service, pokemonDao: PokemonDao) =
+        PokemonRepositoryImpl(service, pokemonDao)
 }

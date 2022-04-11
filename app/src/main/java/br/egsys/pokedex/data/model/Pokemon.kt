@@ -1,7 +1,6 @@
 package br.egsys.pokedex.data.model
 
 import android.os.Parcelable
-import br.egsys.pokedex.data.dto.PokemonDto
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -13,12 +12,48 @@ data class Pokemon(
     val types: List<PokemonType>,
     val weight: Long,
     val height: Long,
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+        fun mapToPokemonDTO(pokemon: Pokemon, offSet: Int): PokemonDto {
+            val types = pokemon.types
+                .map { it.type.name }
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString(", ") ?: ""
+
+            return PokemonDto(
+                id = pokemon.id.toString(),
+//                offSet = offSet,
+                name = pokemon.name,
+                types = types,
+                weight = pokemon.weight.toInt(),
+                height = pokemon.height.toInt(),
+                image = pokemon.sprites.frontDefault
+            )
+        }
+
+        fun mapToPokemonView(pokemon: Pokemon): PokemonView {
+            val types = pokemon.types
+                .map { it.type.name }
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString(", ") ?: ""
+
+            return PokemonView(
+                id = pokemon.id.toString(),
+                name = pokemon.name,
+                types = types,
+                weight = pokemon.weight.toInt(),
+                height = pokemon.height.toInt(),
+                image = pokemon.sprites.frontDefault
+            )
+        }
+    }
+}
 
 @Parcelize
 data class PokemonDtoWithCount(
     val count: Int = 0,
-    val pokemonsDto: List<PokemonDto> = listOf()
+    val pokemonsView: List<PokemonView> = listOf()
 ) : Parcelable
 
 @Parcelize
