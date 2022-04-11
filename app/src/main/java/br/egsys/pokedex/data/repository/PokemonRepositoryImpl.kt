@@ -63,7 +63,7 @@ class PokemonRepositoryImpl @Inject constructor(
         response.results.map {
             val pokemon = service.getPokemonByName(it.name)
 
-            pokemonDao.addPokemonDto(mapToPokemonDTO(pokemon, offSet))
+            pokemonDao.addPokemonDto(mapToPokemonDTO(pokemon))
         }
     }
 

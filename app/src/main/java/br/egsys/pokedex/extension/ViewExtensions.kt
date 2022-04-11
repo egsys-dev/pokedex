@@ -7,7 +7,6 @@ import android.graphics.*
 import android.os.Build
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.StyleRes
@@ -192,7 +191,6 @@ fun View.requestApplyInsetsWhenAttached() {
 }
 
 fun View.getViewRect(): RectF = RectF(x, y, x + width, y + height)
-
 
 val View.isLTR: Boolean
     get() = TextUtilsCompat.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_LTR

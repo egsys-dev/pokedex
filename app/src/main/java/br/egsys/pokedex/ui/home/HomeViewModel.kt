@@ -72,6 +72,5 @@ class HomeViewModel @Inject constructor(
     companion object {
         const val LIMIT = 20
         const val OFF_SET_INITIAL = 0
-        const val OFF_SET_VARIATION = 20
     }
 }

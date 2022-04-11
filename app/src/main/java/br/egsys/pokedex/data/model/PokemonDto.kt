@@ -10,7 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class PokemonDto(
     @PrimaryKey
     val id: String,
-//    val offSet: Int,
     val name: String,
     val types: String,
     val weight: Int,

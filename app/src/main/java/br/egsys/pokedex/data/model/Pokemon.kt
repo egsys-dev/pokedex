@@ -15,7 +15,7 @@ data class Pokemon(
 ) : Parcelable {
 
     companion object {
-        fun mapToPokemonDTO(pokemon: Pokemon, offSet: Int): PokemonDto {
+        fun mapToPokemonDTO(pokemon: Pokemon): PokemonDto {
             val types = pokemon.types
                 .map { it.type.name }
                 .takeIf { it.isNotEmpty() }
@@ -23,7 +23,6 @@ data class Pokemon(
 
             return PokemonDto(
                 id = pokemon.id.toString(),
-//                offSet = offSet,
                 name = pokemon.name,
                 types = types,
                 weight = pokemon.weight.toInt(),
@@ -49,12 +48,6 @@ data class Pokemon(
         }
     }
 }
-
-@Parcelize
-data class PokemonDtoWithCount(
-    val count: Int = 0,
-    val pokemonsView: List<PokemonView> = listOf()
-) : Parcelable
 
 @Parcelize
 data class Sprites(
